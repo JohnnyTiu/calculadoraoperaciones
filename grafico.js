@@ -1,7 +1,14 @@
-// ===================== MÉTODO GRÁFICO ====================== //
+// grafico.js - Código completo para el método gráfico
+
+// ===================== MÉTODO GRÁFICO - FUNCIÓN PRINCIPAL ====================== //
 
 function resolverGrafico(objetivo, restricciones, tipoOptimizacion) {
     try {
+        console.log('Iniciando método gráfico...');
+        console.log('Objetivo:', objetivo);
+        console.log('Restricciones:', restricciones);
+        console.log('Tipo:', tipoOptimizacion);
+
         // Validar que sea un problema 2D
         if (objetivo.length !== 2) {
             throw new Error("El método gráfico solo funciona con 2 variables");
@@ -9,6 +16,7 @@ function resolverGrafico(objetivo, restricciones, tipoOptimizacion) {
 
         // Encontrar todos los puntos factibles
         const puntosFactibles = encontrarPuntosFactiblesGrafico(restricciones);
+        console.log('Puntos factibles encontrados:', puntosFactibles);
         
         if (puntosFactibles.length === 0) {
             return {
@@ -37,6 +45,8 @@ function resolverGrafico(objetivo, restricciones, tipoOptimizacion) {
             }
         }
 
+        console.log('Mejor punto:', mejorPunto, 'Valor:', mejorValor);
+
         // Encontrar la región factible (polígono convexo)
         const regionFactible = encontrarRegionFactible(puntosFactibles);
 
@@ -54,6 +64,7 @@ function resolverGrafico(objetivo, restricciones, tipoOptimizacion) {
         };
         
     } catch (error) {
+        console.error('Error en resolverGrafico:', error);
         return {
             solucionOptima: false,
             valorOptimo: 0,
@@ -64,6 +75,8 @@ function resolverGrafico(objetivo, restricciones, tipoOptimizacion) {
         };
     }
 }
+
+// ===================== FUNCIONES AUXILIARES PARA EL MÉTODO GRÁFICO ====================== //
 
 function encontrarPuntosFactiblesGrafico(restricciones) {
     const puntos = [];
@@ -182,22 +195,32 @@ function calcularCentroide(puntos) {
     return [sum[0] / puntos.length, sum[1] / puntos.length];
 }
 
-// Función para dibujar el gráfico CORREGIDA
+// ===================== FUNCIÓN DIBUJAR GRÁFICO MEJORADA ====================== //
+
 function dibujarGrafico(resultado, containerId) {
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+        console.error('Contenedor no encontrado:', containerId);
+        return;
+    }
     
-    const ancho = 600;
-    const alto = 400;
-    const margen = 50;
+    console.log('Dibujando gráfico...');
     
-    // Encontrar los límites del gráfico
+    // Limpiar contenedor primero
+    container.innerHTML = '';
+    
+    const ancho = 700;
+    const alto = 500;
+    const margen = 80;
+    
+    // Encontrar los límites del gráfico con márgenes adecuados
     const todosPuntos = [...resultado.puntosFactibles, ...resultado.regionFactible];
     const todosX = todosPuntos.map(p => p[0]);
     const todosY = todosPuntos.map(p => p[1]);
     
-    const maxX = Math.max(...todosX, 10);
-    const maxY = Math.max(...todosY, 10);
+    // Calcular límites con márgenes
+    const maxX = Math.max(...todosX, 1) * 1.2;
+    const maxY = Math.max(...todosY, 1) * 1.2;
     
     // Escalas
     const escalaX = (ancho - 2 * margen) / maxX;
@@ -208,17 +231,12 @@ function dibujarGrafico(resultado, containerId) {
     svg.setAttribute("width", ancho);
     svg.setAttribute("height", alto);
     svg.setAttribute("class", "grafico-svg");
+    svg.setAttribute("style", "background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);");
     
-    // Fondo
-    const fondo = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    fondo.setAttribute("width", ancho);
-    fondo.setAttribute("height", alto);
-    fondo.setAttribute("fill", "#f8f9fa");
-    svg.appendChild(fondo);
-    
-    // Definir marcador de flecha para restricciones
+    // Definir marcadores de flecha
     const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
     
+    // Flecha para restricciones
     const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
     marker.setAttribute("id", "arrowhead");
     marker.setAttribute("markerWidth", "10");
@@ -232,49 +250,103 @@ function dibujarGrafico(resultado, containerId) {
     marker.appendChild(polygon);
     defs.appendChild(marker);
     
-    const markerRojo = document.createElementNS("http://www.w3.org/2000/svg", "marker");
-    markerRojo.setAttribute("id", "arrowhead-rojo");
-    markerRojo.setAttribute("markerWidth", "10");
-    markerRojo.setAttribute("markerHeight", "7");
-    markerRojo.setAttribute("refX", "9");
-    markerRojo.setAttribute("refY", "3.5");
-    markerRojo.setAttribute("orient", "auto");
-    const polygonRojo = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    polygonRojo.setAttribute("points", "0 0, 10 3.5, 0 7");
-    polygonRojo.setAttribute("fill", "#dc3545");
-    markerRojo.appendChild(polygonRojo);
-    defs.appendChild(markerRojo);
+    // Flecha para función objetivo
+    const markerObjetivo = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+    markerObjetivo.setAttribute("id", "arrowhead-objetivo");
+    markerObjetivo.setAttribute("markerWidth", "12");
+    markerObjetivo.setAttribute("markerHeight", "8");
+    markerObjetivo.setAttribute("refX", "10");
+    markerObjetivo.setAttribute("refY", "4");
+    markerObjetivo.setAttribute("orient", "auto");
+    const polygonObjetivo = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    polygonObjetivo.setAttribute("points", "0 0, 12 4, 0 8");
+    polygonObjetivo.setAttribute("fill", "#dc3545");
+    markerObjetivo.appendChild(polygonObjetivo);
+    defs.appendChild(markerObjetivo);
+    
+    // Patrón para región factible
+    const pattern = document.createElementNS("http://www.w3.org/2000/svg", "pattern");
+    pattern.setAttribute("id", "region-pattern");
+    pattern.setAttribute("patternUnits", "userSpaceOnUse");
+    pattern.setAttribute("width", "20");
+    pattern.setAttribute("height", "20");
+    pattern.setAttribute("patternTransform", "rotate(45)");
+    const rectPattern = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rectPattern.setAttribute("width", "20");
+    rectPattern.setAttribute("height", "20");
+    rectPattern.setAttribute("fill", "rgba(13, 110, 253, 0.1)");
+    pattern.appendChild(rectPattern);
+    const linePattern = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    linePattern.setAttribute("x1", "0");
+    linePattern.setAttribute("y1", "0");
+    linePattern.setAttribute("x2", "0");
+    linePattern.setAttribute("y2", "20");
+    linePattern.setAttribute("stroke", "rgba(13, 110, 253, 0.3)");
+    linePattern.setAttribute("stroke-width", "1");
+    pattern.appendChild(linePattern);
+    defs.appendChild(pattern);
     
     svg.appendChild(defs);
     
-    // Ejes
-    dibujarEjes(svg, ancho, alto, margen, maxX, maxY, escalaX, escalaY);
+    // Dibujar componentes en orden correcto
+    dibujarEjesMejorados(svg, ancho, alto, margen, maxX, maxY, escalaX, escalaY);
     
-    // Región factible
+    // Región factible primero (fondo)
     if (resultado.regionFactible.length >= 3) {
-        dibujarRegionFactible(svg, resultado.regionFactible, margen, escalaX, escalaY, alto);
+        dibujarRegionFactibleMejorada(svg, resultado.regionFactible, margen, escalaX, escalaY, alto);
     }
     
     // Restricciones
     resultado.restricciones.forEach((restriccion, index) => {
-        dibujarRestriccion(svg, restriccion, margen, escalaX, escalaY, alto, maxX, index);
+        dibujarRestriccionMejorada(svg, restriccion, margen, escalaX, escalaY, alto, maxX, maxY, index);
     });
     
-    // Puntos factibles - CORREGIDO: Ahora sí se dibujan
+    // Función objetivo
+    dibujarFuncionObjetivoMejorada(svg, resultado.objetivo, resultado.valorOptimo, margen, escalaX, escalaY, alto, maxX, maxY, resultado.tipoOptimizacion);
+    
+    // Puntos factibles
     resultado.puntosFactibles.forEach(punto => {
-        dibujarPunto(svg, punto, margen, escalaX, escalaY, alto, false, false);
+        dibujarPuntoMejorado(svg, punto, margen, escalaX, escalaY, alto, false, false);
     });
     
-    // Punto óptimo
-    dibujarPunto(svg, resultado.variables, margen, escalaX, escalaY, alto, true, false);
+    // Punto óptimo (último para que quede encima)
+    dibujarPuntoMejorado(svg, resultado.variables, margen, escalaX, escalaY, alto, true, false);
     
-    // Línea de la función objetivo
-    dibujarFuncionObjetivo(svg, resultado.objetivo, resultado.valorOptimo, margen, escalaX, escalaY, alto, maxX);
+    // Leyenda
+    dibujarLeyenda(svg, ancho, alto, margen);
     
     container.appendChild(svg);
+    console.log('Gráfico dibujado exitosamente');
 }
 
-function dibujarEjes(svg, ancho, alto, margen, maxX, maxY, escalaX, escalaY) {
+// ===================== FUNCIONES AUXILIARES MEJORADAS ====================== //
+
+function dibujarEjesMejorados(svg, ancho, alto, margen, maxX, maxY, escalaX, escalaY) {
+    // Cuadrícula de fondo
+    for (let x = 0; x <= maxX; x += Math.ceil(maxX / 10)) {
+        const lineaGridX = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        lineaGridX.setAttribute("x1", margen + x * escalaX);
+        lineaGridX.setAttribute("y1", margen);
+        lineaGridX.setAttribute("x2", margen + x * escalaX);
+        lineaGridX.setAttribute("y2", alto - margen);
+        lineaGridX.setAttribute("stroke", "rgba(0,0,0,0.1)");
+        lineaGridX.setAttribute("stroke-width", "1");
+        lineaGridX.setAttribute("stroke-dasharray", "2,2");
+        svg.appendChild(lineaGridX);
+    }
+    
+    for (let y = 0; y <= maxY; y += Math.ceil(maxY / 10)) {
+        const lineaGridY = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        lineaGridY.setAttribute("x1", margen);
+        lineaGridY.setAttribute("y1", alto - margen - y * escalaY);
+        lineaGridY.setAttribute("x2", ancho - margen);
+        lineaGridY.setAttribute("y2", alto - margen - y * escalaY);
+        lineaGridY.setAttribute("stroke", "rgba(0,0,0,0.1)");
+        lineaGridY.setAttribute("stroke-width", "1");
+        lineaGridY.setAttribute("stroke-dasharray", "2,2");
+        svg.appendChild(lineaGridY);
+    }
+    
     // Eje X
     const ejeX = document.createElementNS("http://www.w3.org/2000/svg", "line");
     ejeX.setAttribute("x1", margen);
@@ -282,7 +354,7 @@ function dibujarEjes(svg, ancho, alto, margen, maxX, maxY, escalaX, escalaY) {
     ejeX.setAttribute("x2", ancho - margen);
     ejeX.setAttribute("y2", alto - margen);
     ejeX.setAttribute("stroke", "#333");
-    ejeX.setAttribute("stroke-width", "2");
+    ejeX.setAttribute("stroke-width", "3");
     svg.appendChild(ejeX);
     
     // Eje Y
@@ -292,38 +364,53 @@ function dibujarEjes(svg, ancho, alto, margen, maxX, maxY, escalaX, escalaY) {
     ejeY.setAttribute("x2", margen);
     ejeY.setAttribute("y2", alto - margen);
     ejeY.setAttribute("stroke", "#333");
-    ejeY.setAttribute("stroke-width", "2");
+    ejeY.setAttribute("stroke-width", "3");
     svg.appendChild(ejeY);
     
-    // Marcas en eje X
-    for (let x = 0; x <= maxX; x += Math.ceil(maxX / 10)) {
+    // Flechas de ejes
+    const flechaX = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    flechaX.setAttribute("points", `${ancho - margen},${alto - margen} ${ancho - margen - 10},${alto - margen - 5} ${ancho - margen - 10},${alto - margen + 5}`);
+    flechaX.setAttribute("fill", "#333");
+    svg.appendChild(flechaX);
+    
+    const flechaY = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    flechaY.setAttribute("points", `${margen},${margen} ${margen - 5},${margen + 10} ${margen + 5},${margen + 10}`);
+    flechaY.setAttribute("fill", "#333");
+    svg.appendChild(flechaY);
+    
+    // Marcas y etiquetas en eje X
+    for (let x = 0; x <= maxX; x += Math.max(1, Math.ceil(maxX / 8))) {
         const xPixel = margen + x * escalaX;
         const marca = document.createElementNS("http://www.w3.org/2000/svg", "line");
         marca.setAttribute("x1", xPixel);
-        marca.setAttribute("y1", alto - margen - 5);
+        marca.setAttribute("y1", alto - margen - 8);
         marca.setAttribute("x2", xPixel);
-        marca.setAttribute("y2", alto - margen + 5);
+        marca.setAttribute("y2", alto - margen + 8);
         marca.setAttribute("stroke", "#333");
+        marca.setAttribute("stroke-width", "2");
         svg.appendChild(marca);
         
         const texto = document.createElementNS("http://www.w3.org/2000/svg", "text");
         texto.setAttribute("x", xPixel);
-        texto.setAttribute("y", alto - margen + 20);
+        texto.setAttribute("y", alto - margen + 25);
         texto.setAttribute("text-anchor", "middle");
         texto.setAttribute("fill", "#333");
+        texto.setAttribute("font-weight", "bold");
+        texto.setAttribute("font-size", "11");
         texto.textContent = x;
         svg.appendChild(texto);
     }
     
-    // Marcas en eje Y
-    for (let y = 0; y <= maxY; y += Math.ceil(maxY / 10)) {
+    // Marcas y etiquetas en eje Y
+    for (let y = 0; y <= maxY; y += Math.max(1, Math.ceil(maxY / 8))) {
         const yPixel = alto - margen - y * escalaY;
         const marca = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        marca.setAttribute("x1", margen - 5);
+        marca.setAttribute("x1", margen - 8);
         marca.setAttribute("y1", yPixel);
-        marca.setAttribute("x2", margen + 5);
+        marca.setAttribute("x2", margen + 8);
         marca.setAttribute("y2", yPixel);
         marca.setAttribute("stroke", "#333");
+        marca.setAttribute("stroke-width", "2");
         svg.appendChild(marca);
         
         const texto = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -331,45 +418,48 @@ function dibujarEjes(svg, ancho, alto, margen, maxX, maxY, escalaX, escalaY) {
         texto.setAttribute("y", yPixel + 4);
         texto.setAttribute("text-anchor", "end");
         texto.setAttribute("fill", "#333");
+        texto.setAttribute("font-weight", "bold");
+        texto.setAttribute("font-size", "11");
         texto.textContent = y;
         svg.appendChild(texto);
     }
     
     // Etiquetas de ejes
     const etiquetaX = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    etiquetaX.setAttribute("x", ancho - margen + 10);
-    etiquetaX.setAttribute("y", alto - margen);
+    etiquetaX.setAttribute("x", ancho - margen + 20);
+    etiquetaX.setAttribute("y", alto - margen - 10);
     etiquetaX.setAttribute("fill", "#333");
     etiquetaX.setAttribute("font-weight", "bold");
+    etiquetaX.setAttribute("font-size", "14");
     etiquetaX.textContent = "x₁";
     svg.appendChild(etiquetaX);
     
     const etiquetaY = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    etiquetaY.setAttribute("x", margen);
-    etiquetaY.setAttribute("y", margen - 10);
+    etiquetaY.setAttribute("x", margen - 20);
+    etiquetaY.setAttribute("y", margen - 15);
     etiquetaY.setAttribute("fill", "#333");
     etiquetaY.setAttribute("font-weight", "bold");
+    etiquetaY.setAttribute("font-size", "14");
     etiquetaY.textContent = "x₂";
     svg.appendChild(etiquetaY);
 }
 
-function dibujarRegionFactible(svg, region, margen, escalaX, escalaY, alto) {
-    if (region.length < 3) return;
-    
+function dibujarRegionFactibleMejorada(svg, region, margen, escalaX, escalaY, alto) {
     const puntosSVG = region.map(punto => 
         `${margen + punto[0] * escalaX},${alto - margen - punto[1] * escalaY}`
     ).join(" ");
     
     const poligono = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
     poligono.setAttribute("points", puntosSVG);
-    poligono.setAttribute("fill", "rgba(30, 144, 255, 0.3)");
-    poligono.setAttribute("stroke", "rgba(30, 144, 255, 0.8)");
-    poligono.setAttribute("stroke-width", "1");
+    poligono.setAttribute("fill", "url(#region-pattern)");
+    poligono.setAttribute("stroke", "#0d6efd");
+    poligono.setAttribute("stroke-width", "2");
+    poligono.setAttribute("stroke-dasharray", "4,2");
     svg.appendChild(poligono);
 }
 
-function dibujarRestriccion(svg, restriccion, margen, escalaX, escalaY, alto, maxX, index) {
-    const colores = ["#ff6b6b", "#51cf66", "#ffd43b", "#339af0", "#cc5de8"];
+function dibujarRestriccionMejorada(svg, restriccion, margen, escalaX, escalaY, alto, maxX, maxY, index) {
+    const colores = ["#dc3545", "#198754", "#ffc107", "#6f42c1", "#fd7e14", "#20c997"];
     const color = colores[index % colores.length];
     
     // Encontrar dos puntos para dibujar la línea
@@ -403,88 +493,179 @@ function dibujarRestriccion(svg, restriccion, margen, escalaX, escalaY, alto, ma
     linea.setAttribute("x2", margen + punto2[0] * escalaX);
     linea.setAttribute("y2", alto - margen - punto2[1] * escalaY);
     linea.setAttribute("stroke", color);
-    linea.setAttribute("stroke-width", "2");
-    linea.setAttribute("stroke-dasharray", "5,5");
+    linea.setAttribute("stroke-width", "3");
     linea.setAttribute("marker-end", "url(#arrowhead)");
     svg.appendChild(linea);
     
-    // Etiqueta de la restricción
+    // Etiqueta de la restricción con fondo para mejor legibilidad
+    const grupoTexto = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    
+    const fondoTexto = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    const textoX = margen + (punto1[0] + punto2[0]) / 2 * escalaX + 5;
+    const textoY = alto - margen - (punto1[1] + punto2[1]) / 2 * escalaY - 15;
+    fondoTexto.setAttribute("x", textoX - 5);
+    fondoTexto.setAttribute("y", textoY - 12);
+    fondoTexto.setAttribute("width", "120");
+    fondoTexto.setAttribute("height", "20");
+    fondoTexto.setAttribute("fill", "white");
+    fondoTexto.setAttribute("stroke", color);
+    fondoTexto.setAttribute("stroke-width", "1");
+    fondoTexto.setAttribute("rx", "3");
+    grupoTexto.appendChild(fondoTexto);
+    
     const texto = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    texto.setAttribute("x", margen + (punto1[0] + punto2[0]) / 2 * escalaX + 10);
-    texto.setAttribute("y", alto - margen - (punto1[1] + punto2[1]) / 2 * escalaY - 10);
+    texto.setAttribute("x", textoX);
+    texto.setAttribute("y", textoY);
     texto.setAttribute("fill", color);
     texto.setAttribute("font-weight", "bold");
-    texto.setAttribute("font-size", "12");
-    texto.textContent = `${restriccion.coeficientes[0]}x₁ + ${restriccion.coeficientes[1]}x₂ ${restriccion.tipo} ${restriccion.valor}`;
-    svg.appendChild(texto);
+    texto.setAttribute("font-size", "10");
+    texto.textContent = `R${index + 1}: ${restriccion.coeficientes[0]}x₁ + ${restriccion.coeficientes[1]}x₂ ${restriccion.tipo} ${restriccion.valor}`;
+    grupoTexto.appendChild(texto);
+    
+    svg.appendChild(grupoTexto);
 }
 
-// FUNCIÓN CORREGIDA: Ahora dibuja todos los puntos correctamente
-function dibujarPunto(svg, punto, margen, escalaX, escalaY, alto, esOptimo, esIntercepcion) {
+function dibujarPuntoMejorado(svg, punto, margen, escalaX, escalaY, alto, esOptimo, esIntercepcion) {
     const xPixel = margen + punto[0] * escalaX;
     const yPixel = alto - margen - punto[1] * escalaY;
-    
-    // Solo dibujar puntos dentro del área visible
-    if (xPixel < margen || xPixel > (margen + (maxX || 10) * escalaX) || 
-        yPixel < margen || yPixel > (alto - margen)) {
-        return;
-    }
     
     const circulo = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circulo.setAttribute("cx", xPixel);
     circulo.setAttribute("cy", yPixel);
-    circulo.setAttribute("r", esOptimo ? "6" : "4");
-    circulo.setAttribute("fill", esOptimo ? "#ff6b6b" : (esIntercepcion ? "#20c997" : "#495057"));
-    circulo.setAttribute("stroke", esOptimo ? "#c92a2a" : (esIntercepcion ? "#0ca678" : "#343a40"));
-    circulo.setAttribute("stroke-width", esOptimo ? "2" : "1");
+    circulo.setAttribute("r", esOptimo ? "8" : "5");
+    circulo.setAttribute("fill", esOptimo ? "#dc3545" : (esIntercepcion ? "#20c997" : "#6f42c1"));
+    circulo.setAttribute("stroke", esOptimo ? "#a71e2a" : (esIntercepcion ? "#0ca678" : "#5a3598"));
+    circulo.setAttribute("stroke-width", esOptimo ? "3" : "2");
+    circulo.setAttribute("filter", esOptimo ? "drop-shadow(0 2px 4px rgba(220, 53, 69, 0.5))" : "none");
     svg.appendChild(circulo);
     
     if (esOptimo) {
+        const grupoTexto = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        
+        const fondo = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        fondo.setAttribute("x", xPixel + 12);
+        fondo.setAttribute("y", yPixel - 25);
+        fondo.setAttribute("width", "140");
+        fondo.setAttribute("height", "20");
+        fondo.setAttribute("fill", "#dc3545");
+        fondo.setAttribute("rx", "10");
+        fondo.setAttribute("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.2))");
+        grupoTexto.appendChild(fondo);
+        
         const texto = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        texto.setAttribute("x", xPixel + 10);
+        texto.setAttribute("x", xPixel + 20);
         texto.setAttribute("y", yPixel - 10);
-        texto.setAttribute("fill", "#c92a2a");
+        texto.setAttribute("fill", "white");
         texto.setAttribute("font-weight", "bold");
-        texto.setAttribute("font-size", "12");
-        texto.textContent = `Óptimo (${punto[0].toFixed(2)}, ${punto[1].toFixed(2)})`;
-        svg.appendChild(texto);
+        texto.setAttribute("font-size", "11");
+        texto.textContent = `Óptimo: (${punto[0].toFixed(2)}, ${punto[1].toFixed(2)})`;
+        grupoTexto.appendChild(texto);
+        
+        svg.appendChild(grupoTexto);
     }
 }
 
-function dibujarFuncionObjetivo(svg, objetivo, valorOptimo, margen, escalaX, escalaY, alto, maxX) {
-    // Dibujar línea de la función objetivo en el valor óptimo
+function dibujarFuncionObjetivoMejorada(svg, objetivo, valorOptimo, margen, escalaX, escalaY, alto, maxX, maxY, tipoOptimizacion) {
     if (Math.abs(objetivo[1]) > 1e-8) {
         const punto1 = [0, valorOptimo / objetivo[1]];
         const punto2 = [maxX, (valorOptimo - objetivo[0] * maxX) / objetivo[1]];
         
-        // Asegurar que los puntos estén dentro de los límites
-        const y1 = Math.min(punto1[1], maxY || 10);
-        const y2 = Math.min(punto2[1], maxY || 10);
+        const y1 = Math.min(punto1[1], maxY);
+        const y2 = Math.min(punto2[1], maxY);
         
         const linea = document.createElementNS("http://www.w3.org/2000/svg", "line");
         linea.setAttribute("x1", margen + 0 * escalaX);
         linea.setAttribute("y1", alto - margen - y1 * escalaY);
         linea.setAttribute("x2", margen + maxX * escalaX);
         linea.setAttribute("y2", alto - margen - y2 * escalaY);
-        linea.setAttribute("stroke", "#20c997");
-        linea.setAttribute("stroke-width", "3");
-        linea.setAttribute("stroke-dasharray", "8,4");
-        linea.setAttribute("marker-end", "url(#arrowhead-rojo)");
+        linea.setAttribute("stroke", "#fd7e14");
+        linea.setAttribute("stroke-width", "4");
+        linea.setAttribute("stroke-dasharray", "10,6");
+        linea.setAttribute("marker-end", "url(#arrowhead-objetivo)");
+        linea.setAttribute("filter", "drop-shadow(0 2px 3px rgba(253, 126, 20, 0.3))");
         svg.appendChild(linea);
         
-        // Etiqueta de la función objetivo
+        // Etiqueta con fondo
+        const grupoTexto = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        
+        const fondo = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        const textoX = margen + (maxX / 2) * escalaX - 60;
+        const textoY = alto - margen - ((y1 + y2) / 2) * escalaY - 25;
+        fondo.setAttribute("x", textoX - 5);
+        fondo.setAttribute("y", textoY - 12);
+        fondo.setAttribute("width", "130");
+        fondo.setAttribute("height", "20");
+        fondo.setAttribute("fill", "#fd7e14");
+        fondo.setAttribute("rx", "10");
+        grupoTexto.appendChild(fondo);
+        
         const texto = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        texto.setAttribute("x", margen + (maxX / 2) * escalaX);
-        texto.setAttribute("y", alto - margen - ((y1 + y2) / 2) * escalaY - 15);
-        texto.setAttribute("text-anchor", "middle");
-        texto.setAttribute("fill", "#20c997");
+        texto.setAttribute("x", textoX);
+        texto.setAttribute("y", textoY);
+        texto.setAttribute("fill", "white");
         texto.setAttribute("font-weight", "bold");
-        texto.setAttribute("font-size", "12");
-        texto.textContent = `Z = ${objetivo[0]}x₁ + ${objetivo[1]}x₂`;
-        svg.appendChild(texto);
+        texto.setAttribute("font-size", "10");
+        texto.textContent = `Z = ${objetivo[0]}x₁ + ${objetivo[1]}x₂ (${tipoOptimizacion})`;
+        grupoTexto.appendChild(texto);
+        
+        svg.appendChild(grupoTexto);
     }
 }
 
-// Variables globales para las funciones de dibujo
-let maxX = 10;
-let maxY = 10;
+function dibujarLeyenda(svg, ancho, alto, margen) {
+    const leyenda = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    
+    const fondo = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    fondo.setAttribute("x", ancho - 180);
+    fondo.setAttribute("y", margen - 40);
+    fondo.setAttribute("width", "160");
+    fondo.setAttribute("height", "120");
+    fondo.setAttribute("fill", "white");
+    fondo.setAttribute("stroke", "#ddd");
+    fondo.setAttribute("stroke-width", "1");
+    fondo.setAttribute("rx", "8");
+    fondo.setAttribute("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
+    leyenda.appendChild(fondo);
+    
+    const titulo = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    titulo.setAttribute("x", ancho - 100);
+    titulo.setAttribute("y", margen - 20);
+    titulo.setAttribute("text-anchor", "middle");
+    titulo.setAttribute("fill", "#333");
+    titulo.setAttribute("font-weight", "bold");
+    titulo.setAttribute("font-size", "12");
+    titulo.textContent = "LEYENDA";
+    leyenda.appendChild(titulo);
+    
+    // Elementos de la leyenda
+    const elementos = [
+        { color: "#fd7e14", texto: "Función Objetivo" },
+        { color: "#0d6efd", texto: "Región Factible" },
+        { color: "#dc3545", texto: "Punto Óptimo" },
+        { color: "#6f42c1", texto: "Puntos Factibles" }
+    ];
+    
+    elementos.forEach((elemento, index) => {
+        const yPos = margen + index * 25;
+        
+        const circulo = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        circulo.setAttribute("x", ancho - 170);
+        circulo.setAttribute("y", yPos - 8);
+        circulo.setAttribute("width", "12");
+        circulo.setAttribute("height", "12");
+        circulo.setAttribute("fill", elemento.color);
+        circulo.setAttribute("rx", "2");
+        leyenda.appendChild(circulo);
+        
+        const texto = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        texto.setAttribute("x", ancho - 150);
+        texto.setAttribute("y", yPos);
+        texto.setAttribute("fill", "#333");
+        texto.setAttribute("font-size", "10");
+        texto.setAttribute("dominant-baseline", "middle");
+        texto.textContent = elemento.texto;
+        leyenda.appendChild(texto);
+    });
+    
+    svg.appendChild(leyenda);
+}
