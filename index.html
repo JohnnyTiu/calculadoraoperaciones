@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Optimización</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🔢 Calculadora de Optimización</h1>
+    <nav>
+      <ul>
+        <li><a href="#simplex">Simplex</a></li>
+        <li><a href="#grafico">Gráfico</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#asignacion">Asignación</a></li>
+        <li><a href="#cpm">CPM</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Selector de método -->
+    <section class="selector">
+      <h2>Selecciona un método</h2>
+      <select id="metodo">
+        <option value="">-- Elegir --</option>
+        <option value="simplex">Método Simplex</option>
+        <option value="grafico">Método Gráfico</option>
+        <option value="transporte">Método de Transporte</option>
+        <option value="asignacion">Método de Asignación</option>
+        <option value="cpm">Método CPM</option>
+      </select>
+    </section>
+
+    <!-- Formulario dinámico -->
+    <section class="formulario">
+      <h2>Datos de Entrada</h2>
+      
+      <!-- Contenedor dinámico para Simplex -->
+      <div id="simplex-box"></div>
+
+      <!-- Contenedor dinámico para Gráfico -->
+      <div id="grafico-box"></div>
+
+      <!-- Contenedor dinámico para Transporte -->
+      <div id="transporte-box"></div>
+
+      <!-- Contenedor dinámico para Asignación -->
+      <div id="asignacion-box"></div>
+
+      <!-- Contenedor dinámico para CPM -->
+      <div id="cpm-box"></div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="resultados">
+      <h2>Resultados</h2>
+      <div id="resultado-box">
+        <p>Selecciona un método y completa los datos.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Calculadora de Optimización</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="simplex.js"></script>
+  <script src="transporte.js"></script>
+  <script src="grafico.js"></script>
+  <script src="asignacion.js"></script>
+  <script src="cpm.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

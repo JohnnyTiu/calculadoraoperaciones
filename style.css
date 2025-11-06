@@ -1,0 +1,660 @@
+/* --- Reset básico --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  padding: 0 20px;
+  line-height: 1.6;
+}
+
+/* --- Encabezado y navegación --- */
+header {
+  background: #1e90ff;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  transition: background 0.3s;
+  border-radius: 5px;
+}
+
+nav a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* --- Secciones principales --- */
+main {
+  max-width: 1000px;
+  margin: 0 auto 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+section {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+section h2 {
+  margin-bottom: 20px;
+  color: #1e90ff;
+  border-bottom: 2px solid #1e90ff;
+  padding-bottom: 10px;
+}
+
+/* --- Selector de método --- */
+.selector {
+  text-align: center;
+}
+
+.selector select {
+  padding: 12px;
+  font-size: 1.1em;
+  border: 2px solid #1e90ff;
+  border-radius: 8px;
+  background: white;
+  min-width: 250px;
+}
+
+/* --- Contenedores de métodos --- */
+.metodo-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.metodo-container h3 {
+  color: #1e90ff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* --- Grupos de entrada --- */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  font-weight: bold;
+  color: #555;
+}
+
+.input-group input, .input-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+}
+
+/* --- Botones --- */
+button {
+  background: #1e90ff;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #187bcd;
+}
+
+/* --- Formulario Simplex --- */
+.simplex-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.simplex-form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.funcion-objetivo, .restricciones, .no-negatividad {
+  margin-bottom: 25px;
+}
+
+.funcion-objetivo h4, .restricciones h4, .no-negatividad h4 {
+  color: #1e90ff;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 5px;
+}
+
+.coeficientes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.coeficiente-input {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.coeficiente-input input {
+  width: 80px;
+  text-align: center;
+  padding: 8px;
+}
+
+.restriccion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  flex-wrap: wrap;
+}
+
+.no-negatividad .variables {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.no-negatividad span {
+  background: #e9ecef;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+/* --- Formulario Gráfico --- */
+.grafico-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.grafico-form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.advertencia {
+  background: #fff3cd;
+  color: #856404;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ffeaa7;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* --- Formulario Asignación --- */
+.asignacion-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.info {
+  background: #d1ecf1;
+  color: #0c5460;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #bee5eb;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.instrucciones {
+  color: #6c757d;
+  font-style: italic;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* --- Tablas de transporte --- */
+.tabla-transporte {
+  overflow-x: auto;
+  margin: 15px 0;
+}
+
+.tabla-transporte table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+}
+
+.tabla-transporte th, .tabla-transporte td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.tabla-transporte th {
+  background: #1e90ff;
+  color: white;
+  font-weight: bold;
+}
+
+.tabla-transporte input {
+  width: 70px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.tabla-resultado table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 15px 0;
+}
+
+.tabla-resultado th, .tabla-resultado td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.tabla-resultado th {
+  background: #28a745;
+  color: white;
+  font-weight: bold;
+}
+
+.tabla-resultado td {
+  background: #f8f9fa;
+}
+
+.tabla-resultado small {
+  color: #666;
+  font-size: 0.8em;
+}
+
+/* --- Matrices de asignación --- */
+.matriz-asignacion {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+.matriz-asignacion table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.matriz-asignacion th, .matriz-asignacion td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.matriz-asignacion th {
+  background: #6f42c1;
+  color: white;
+  font-weight: bold;
+}
+
+.matriz-asignacion input {
+  width: 70px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+/* --- Tablas de resultados de asignación --- */
+.tabla-asignacion {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+.tabla-asignacion table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tabla-asignacion th, .tabla-asignacion td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.tabla-asignacion th {
+  background: #6f42c1;
+  color: white;
+  font-weight: bold;
+}
+
+.celda-asignada {
+  background: #d4edda !important;
+  color: #155724;
+  font-weight: bold;
+  position: relative;
+}
+
+.tarea-asignada {
+  background: #e7f3ff !important;
+  color: #004085;
+  font-weight: bold;
+}
+
+.celda-asignada::after {
+  content: " ★";
+  color: #dc3545;
+}
+
+.tabla-detalle {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 15px 0;
+  background: white;
+}
+
+.tabla-detalle th, .tabla-detalle td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.tabla-detalle th {
+  background: #6f42c1;
+  color: white;
+  font-weight: bold;
+}
+
+.tabla-detalle tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+/* --- Gráfico SVG --- */
+.grafico-svg {
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  background: white;
+  margin: 15px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.grafico-container {
+  margin: 25px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.grafico-container h4 {
+  color: #1e90ff;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* --- Tabla de puntos factibles --- */
+.tabla-puntos {
+  overflow-x: auto;
+  margin: 15px 0;
+}
+
+.tabla-puntos table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.tabla-puntos th, .tabla-puntos td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.tabla-puntos th {
+  background: #1e90ff;
+  color: white;
+  font-weight: bold;
+}
+
+.tabla-puntos tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.fila-optima {
+  background: #d4edda !important;
+  font-weight: bold;
+  color: #155724;
+}
+
+.tabla-puntos tr:hover {
+  background: #e3f2fd;
+}
+
+/* --- Resultados --- */
+#resultado-box {
+  background: #f0f8ff;
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px dashed #1e90ff;
+  min-height: 100px;
+}
+
+.resultado-simplex, .resultado-transporte, .resultado-grafico, .resultado-asignacion {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  margin-bottom: 20px;
+}
+
+.solucion-optima {
+  color: #28a745;
+  background: #d4edda;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #c3e6cb;
+  margin-bottom: 20px;
+}
+
+.no-solucion {
+  color: #dc3545;
+  background: #f8d7da;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #f5c6cb;
+}
+
+.error {
+  color: #dc3545;
+  background: #f8d7da;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #f5c6cb;
+  margin: 10px 0;
+}
+
+.resultado-simplex ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.resultado-simplex li {
+  background: #e9ecef;
+  padding: 10px 15px;
+  margin: 8px 0;
+  border-radius: 6px;
+  font-family: monospace;
+  border-left: 4px solid #1e90ff;
+}
+
+.puntos-factibles {
+  margin-top: 25px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.puntos-factibles h4 {
+  color: #1e90ff;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.detalle-asignacion {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.matriz-resultado {
+  margin: 25px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.matriz-resultado h4 {
+  color: #6f42c1;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* --- Footer --- */
+footer {
+  text-align: center;
+  padding: 25px;
+  font-size: 0.9em;
+  color: #555;
+  border-top: 1px solid #ddd;
+  margin-top: 30px;
+  background: #f8f9fa;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  body {
+    padding: 0 10px;
+  }
+  
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .restriccion {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .coeficientes {
+    justify-content: center;
+  }
+  
+  .tabla-transporte, .tabla-resultado, .tabla-puntos, .matriz-asignacion, .tabla-asignacion {
+    font-size: 0.9em;
+  }
+  
+  .tabla-transporte input {
+    width: 60px;
+  }
+  
+  .matriz-asignacion input {
+    width: 50px;
+    padding: 6px;
+  }
+  
+  .grafico-svg {
+    width: 100%;
+    height: auto;
+  }
+  
+  .metodo-container {
+    padding: 15px;
+  }
+  
+  section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5em;
+  }
+  
+  .selector select {
+    width: 100%;
+  }
+  
+  .coeficiente-input input {
+    width: 60px;
+  }
+  
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .matriz-asignacion th, .matriz-asignacion td {
+    padding: 8px;
+  }
+  
+  .tabla-asignacion th, .tabla-asignacion td {
+    padding: 8px;
+    font-size: 0.9em;
+  }
+}
